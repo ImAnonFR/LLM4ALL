@@ -1,4 +1,4 @@
-# 🤖 Discord Bot with LLM Integration
+# 🤖 Discord Bot with LLM Integration (100% FREE)
 
 This is a Python-based Discord bot that connects to local G4F API. Thanks to [G4F](https://github.com/xtekky/gpt4free) <3. It supports text-based conversations with memory and multimodal input (text + image), as well as image generation.
 
