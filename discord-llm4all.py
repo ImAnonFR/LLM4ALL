@@ -13,7 +13,6 @@ OWNER_ID = os.getenv("DISCORD_OWNER_ID") # For !resetmemory command
 # === CONFIGURATION ===
 G4F_API = "http://localhost:1337/v1/chat/completions"
 G4F_API_IMAGE = "http://localhost:1337/v1/images/generate"
-DEFAULT_MODEL = "llava:34b"  # ou qwen-vl, qwen2.5:14b, etc.
 
 # === INTENTS & CLIENT ===
 intents = discord.Intents.default()
@@ -26,11 +25,31 @@ user_history = {}
 user_models = {}
 
 # === QUERY G4F FUNCTION ===
-async def query_g4f(prompt, model, image_b64=None):
-    prompt = [{"role": "user", "content": prompt}]
-    payload = {"model": "", "messages": prompt, "timeout": 60}
+async def query_g4f(prompt, image_b64=None):
     if image_b64:
-        payload["image"] = "data:image/jpeg;base64,"+str(image_b64)
+        content = [
+            {"type": "text", "text": prompt},
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": f"data:image/jpeg;base64,{image_b64}"
+                }
+            }
+        ]
+    else:
+        content = prompt
+
+    payload = {
+        "model": "",
+        "messages": [
+            {
+                "role": "user",
+                "content": content
+            }
+        ],
+        "timeout": 60
+    }
+
     try:
         async with httpx.AsyncClient(timeout=600.0) as client:
             response = await client.post(G4F_API, json=payload)
@@ -115,15 +134,13 @@ async def on_message(message):
             except:
                 await message.channel.send("❌ Unable to read image !")
 
-        model = DEFAULT_MODEL
-
         history = user_history.get(user_id, [])
         history.append(f"User: {prompt}")
         prompt_with_history = "\n".join(history[-5:]) + "\nAssistant:"
 
         async with message.channel.typing():
             await client.change_presence(activity=discord.Game(name=f"Responds to {message.author.name}"))
-            response = await query_g4f(prompt_with_history, model, image_b64)
+            response = await query_g4f(prompt_with_history, image_b64)
 
             answer = response.get("choices", [{}])[0].get("message", {}).get("content", "No content.")
             if debug :
