@@ -102,10 +102,7 @@ Edit the following variables in `bot.py` to match your setup:
 ```python
 G4F_URL = "http://localhost:1337/v1/chat/completions"
 G4F_URL_IMAGE = "http://localhost:1337/v1/images/generate"
-DEFAULT_MODEL = "llava:34b"
 ```
-
-You can change `DEFAULT_MODEL` to any model supported by G4F/or your Ollama  (e.g., `qwen-vl`, `qwen2.5:14b`, etc.).
 
 ---
 
