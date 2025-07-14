@@ -6,7 +6,7 @@ This is a Python-based Discord bot that connects to local G4F API. Thanks to [G4
 
 ## Demo : 
 
-The bot is available in demo on my discord : (https://discord.gg/EtDyk6BPXF)
+The bot is available in demo on my discord : https://discord.gg/EtDyk6BPXF
 
 ## 📦 Features
 
